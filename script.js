@@ -406,30 +406,6 @@ function stopEffect() {
   pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
   pCanvas.style.opacity = "0";
 }
-const snowBtn = document.getElementById("snow-btn");
-const rainBtn = document.getElementById("rain-btn");
-
-snowBtn.addEventListener("click", () => {
-  if (pType === "snow") {
-    stopEffect();
-    snowBtn.classList.remove("active");
-  } else {
-    startEffect("snow");
-    snowBtn.classList.add("active");
-    rainBtn.classList.remove("active");
-  }
-});
-
-rainBtn.addEventListener("click", () => {
-  if (pType === "rain") {
-    stopEffect();
-    rainBtn.classList.remove("active");
-  } else {
-    startEffect("rain");
-    rainBtn.classList.add("active");
-    snowBtn.classList.remove("active");
-  }
-});
 
 settingsBtn.addEventListener("click", () => {
   settingsModal.style.display = "flex";
