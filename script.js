@@ -39,7 +39,7 @@ function extractVideoId(url) {
 }
 
 function extractPlaylistId(url) {
-  const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})(?:\?|&|$)/);
+  const match = url.match(/[?&]list=([^&]+)/);
   return match ? match[1] : null;
 }
 
@@ -464,3 +464,9 @@ saveBtn.addEventListener("click", () => {
   // 닫기
   settingsModal.style.display = "none";
 });
+
+
+playPauseBtn.addEventListener("click", togglePlay);
+document.getElementById("prev").addEventListener("click", () => changeTrack(false));
+document.getElementById("next").addEventListener("click", () => changeTrack(true));
+
