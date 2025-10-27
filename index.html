@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>CodePen - A Pen by SuMin Jo</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Summer Mood Playlist</title>
+</head>
+<body>
+  <div class="background" id="background"></div>
+  
+<!-- ⚙️ 설정 패널 (숨김 상태로 시작) -->
+<div id="settings-modal" class="settings-modal">
+  <div class="settings-content">
+    <h2>🎛 Player Settings</h2>
+
+    <label>Title</label>
+    <input type="text" id="title-input" placeholder="Enter new title">
+    <label>Subtitle</label>
+    <textarea id="subtitle-input" placeholder="Enter subtitle (e.g., '찻잎의 잔향')"></textarea>
+    <label>Playlist URL</label>
+    <input type="text" id="playlist-input-field" placeholder="YouTube Playlist URL">
+
+    <label>Album Cover</label>
+    <input type="file" id="cover-upload" accept="image/*">
+
+    <label>Effect</label>
+    <select id="effect-select">
+      <option value="none">None</option>
+      <option value="snow">❄️ Snow</option>
+      <option value="rain">🌧️ Rain</option>
+    </select>
+
+    <div class="settings-buttons">
+      <button id="save-settings">💾 Save</button>
+      <button id="cancel-settings">✖ Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- 기존 설정 버튼 -->
+<button id="settings-btn" class="settings-btn">⚙️ 설정</button>
+  
+  
+  <div class="title-bar">
+    <h1 class="title" id="main-title">餘韻</h1>
+  </div>
+  <div>
+    <h2 class="sub-title">"찻잎의 잔향"<br>여운 2주년 화이팅!!</h2>
+  </div>
+  <div class="player">
+    <div class="album">
+      <div class="cover-wrapper" id="cover-wrapper">
+        <img id="cover" src="https://imgur.com/XDN0gFh.png" alt="album cover" />
+      </div>
+      <div class="vinyl" id="vinyl"></div>
+    </div>
+
+    <input type="file" id="upload" accept="image/*" hidden>
+
+    <div class="controls">
+      <button id="prev">⏮</button>
+      <button id="playpause">▶</button>
+      <button id="next">⏭</button>
+    </div>
+    <h2 class="song-title" id="song-title">재생 중인 곡 없음</h2>
+    
+   <!-- 🎵 재생바 + 시간 표시 -->
+<div class="progress-wrapper">
+  <div class="time-display" id="current-time">0:00</div>
+  <div class="progress-container" id="progress-container">
+    <div class="progress" id="progress"></div>
+  </div>
+  <div class="time-display" id="duration-time">0:00</div>
+</div>
+<div class="effect-buttons">
+  <button id="snow-btn">❄️</button>
+  <button id="rain-btn">🌧️</button>
+</div>
+
+    <div id="youtube-player"></div>
+  </div>
+  <div class="playlist-input">
+  <input type="text" id="playlist-url" placeholder="YouTube 플레이리스트 URL 입력" />
+  <button id="load-playlist">불러오기</button> <!-- ✅ 이 버튼 -->
+</div>
+<!-- 입자 캔버스 -->
+<canvas id="particles"></canvas>
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+</body>
+</html>
+    <script src='https://www.youtube.com/iframe_api'></script><script  src="./script.js"></script>
+
+  </body>
+  
+</html>
