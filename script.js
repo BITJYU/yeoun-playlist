@@ -193,7 +193,7 @@ loadPlaylistBtn.addEventListener('click', () => {
   }
 
   // ✅ CORS Proxy 적용 (allorigins으로 교체)
-  const proxy = "https://api.allorigins.win/raw?url=";
+  const proxy = "https://corsproxy.io/?";
   const apiUrl = encodeURIComponent(
     `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=${playlistId}&key=AIzaSyDdNqVT7Etw1tYJQN6onzpUpSXceLtWNu0`
   );
@@ -228,7 +228,7 @@ loadPlaylistBtn.addEventListener('click', () => {
         updateSongTitle();
       }
 
-      console.warn(`🎧 플레이리스트가 성공적으로 불러와졌습니다! 총 ${playlist.length}곡`);
+      alert(`🎧 플레이리스트가 성공적으로 불러와졌습니다! 총 ${playlist.length}곡`);
     })
     .catch(err => {
       console.error("❌ Proxy Error:", err);
