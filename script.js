@@ -3,6 +3,8 @@ let isPlaying = false;
 let currentIndex = 0;
 let progressInterval = null;
 let playlist = []; // 나중에 유저 입력 반영
+let lastUpdate = Date.now();
+
 
 const vinyl = document.getElementById('vinyl');
 const playPauseBtn = document.getElementById('playpause');
@@ -49,13 +51,22 @@ function onYouTubeIframeAPIReady() {
   initPlayer();
 }
 
-function initPlayer() {
-  player = new YT.Player('youtube-player', {
-    height: '0',
-    width: '0',
-    videoId: extractVideoId(playlist[currentIndex]),
-    playerVars: { controls: 0, autoplay: 1, mute: 1 }, // ✅ 자동재생 허용
-    events: { onStateChange: onPlayerStateChange, onReady: onPlayerReady }
+function initPlayer(videoId = null) {
+  // 🔒 videoId 없으면 초기화 스킵
+  if (!videoId) {
+    console.warn("⚠️ 유효한 videoId가 없어 초기화를 건너뜁니다.");
+    return;
+  }
+
+  player = new YT.Player("youtube-player", {
+    height: "0",
+    width: "0",
+    videoId, // ✅ 유효한 값만 전달
+    playerVars: { controls: 0, autoplay: 0, mute: 0 },
+    events: {
+      onReady: onPlayerReady,
+      onStateChange: onPlayerStateChange
+    }
   });
 }
 
@@ -139,8 +150,6 @@ if (isPlaying) {
 
 }
 
-let lastUpdate = Date.now();
-
 function startProgress() {
    if (!player || typeof player.getCurrentTime !== "function") return; 
   stopProgress();
@@ -184,7 +193,8 @@ mainTitle.addEventListener('click', () => {
 });
 
 // 🔹 YouTube 플레이리스트 불러오기
-loadPlaylistBtn.addEventListener('click', () => {
+// 🔹 YouTube 플레이리스트 불러오기
+loadPlaylistBtn.addEventListener("click", () => {
   const url = normalizeYouTubeURL(playlistInput.value.trim());
   const playlistId = extractPlaylistId(url);
   if (!playlistId) {
@@ -192,17 +202,20 @@ loadPlaylistBtn.addEventListener('click', () => {
     return;
   }
 
-  // ✅ CORS Proxy 적용 (allorigins으로 교체)
   const proxy = "https://corsproxy.io/?";
   const apiUrl = encodeURIComponent(
-    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=${playlistId}&key=AIzaSyDdNqVT7Etw1tYJQN6onzpUpSXceLtWNu0`
+    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=${playlistId}&key=YOUR_API_KEY`
   );
 
   fetch(proxy + apiUrl)
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
     .then(data => {
       console.log("✅ Data:", data);
-      if (!data || !Array.isArray(data.items) || data.items.length === 0) {
+
+      if (!data.items || data.items.length === 0) {
         alert("⚠️ 플레이리스트를 불러올 수 없습니다. (항목이 없음)");
         return;
       }
@@ -212,29 +225,25 @@ loadPlaylistBtn.addEventListener('click', () => {
       );
       currentIndex = 0;
 
-      const firstId = extractVideoId(playlist[0]);
-      if (!player || typeof player.loadVideoById !== "function") {
-        console.warn("⚠️ player 초기화 중... onReady 후 재시도 예정");
-        initPlayer();
-        const waitForPlayer = setInterval(() => {
-          if (player && typeof player.loadVideoById === "function") {
-            clearInterval(waitForPlayer);
-            player.loadVideoById(firstId);
-            updateSongTitle();
-          }
-        }, 500);
-      } else {
+      const firstId = data.items[0].snippet.resourceId.videoId;
+      console.log("🎵 첫 영상:", firstId);
+
+      // ✅ 기존 player 있으면 갱신만
+      if (player && typeof player.loadVideoById === "function") {
         player.loadVideoById(firstId);
-        updateSongTitle();
+      } else {
+        initPlayer(firstId);
       }
 
-      alert(`🎧 플레이리스트가 성공적으로 불러와졌습니다! 총 ${playlist.length}곡`);
+      updateSongTitle();
+      console.log(`🎧 총 ${playlist.length}곡 로드 완료`);
     })
     .catch(err => {
       console.error("❌ Proxy Error:", err);
-      alert("플레이리스트를 불러올 수 없습니다. (프록시 또는 네트워크 오류)");
+      alert("플레이리스트를 불러올 수 없습니다. (CORS 또는 네트워크 오류)");
     });
 });
+
 
 
 /* 💾 페이지 로드 시 저장된 이미지 복원 */
