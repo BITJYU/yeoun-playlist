@@ -39,7 +39,7 @@ function extractVideoId(url) {
 }
 
 function extractPlaylistId(url) {
-  const match = url.match(/[?&]list=([^&]+)/);
+  const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})(?:\?|&|$)/);
   return match ? match[1] : null;
 }
 
