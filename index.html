@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>餘韻 - Music Player</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="background" id="background"></div>
+
+  <div class="title-bar">
+    <h1 class="title" id="main-title">餘韻</h1>
+    <button class="edit-btn" id="edit-title">✏️</button>
+  </div>
+
+  <div class="player">
+    <div class="album">
+      <div class="cover-wrapper" id="cover-wrapper">
+        <img id="cover" src="https://via.placeholder.com/250x250.png?text=Click+to+Upload" alt="album cover" />
+      </div>
+      <div class="vinyl" id="vinyl"></div>
+    </div>
+
+    <input type="file" id="upload" accept="image/*" hidden>
+
+    <div class="controls">
+      <button id="prev">⏮</button>
+      <button id="playpause">▶</button>
+      <button id="next">⏭</button>
+    </div>
+    <h2 class="song-title" id="song-title">재생 중인 곡 없음</h2>
+    
+   <!-- 🎵 재생바 + 시간 표시 -->
+<div class="progress-wrapper">
+  <div class="time-display" id="current-time">0:00</div>
+  <div class="progress-container" id="progress-container">
+    <div class="progress" id="progress"></div>
+  </div>
+  <div class="time-display" id="duration-time">0:00</div>
+</div>
+
+
+    <div id="youtube-player"></div>
+  </div>
+  <div class="playlist-input">
+  <input type="text" id="playlist-url" placeholder="YouTube 플레이리스트 URL 입력" />
+  <button id="load-playlist">불러오기</button> <!-- ✅ 이 버튼 -->
+</div>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+<script src="script.js"></script>
+</body>
+</html>
