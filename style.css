@@ -212,7 +212,7 @@ button:hover {
   left: 0;
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  background: linear-gradient(90deg, #ff0000, #b30000);
   transition: width 0.1s linear;
 }
 
