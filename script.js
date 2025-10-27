@@ -193,7 +193,7 @@ mainTitle.addEventListener('click', () => {
 });
 
 // 🔹 YouTube 플레이리스트 불러오기
-// 🔹 YouTube 플레이리스트 불러오기
+
 loadPlaylistBtn.addEventListener("click", () => {
   const url = normalizeYouTubeURL(playlistInput.value.trim());
   const playlistId = extractPlaylistId(url);
@@ -202,7 +202,7 @@ loadPlaylistBtn.addEventListener("click", () => {
     return;
   }
 
-  const proxy = "https://corsproxy.io/?";
+  const proxy = "https://api.allorigins.win/raw?url=";
   const apiUrl = encodeURIComponent(
     `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=${playlistId}&key=AIzaSyDdNqVT7Etw1tYJQN6onzpUpSXceLtWNu0`
   );
