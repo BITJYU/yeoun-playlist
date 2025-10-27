@@ -43,7 +43,7 @@ function extractPlaylistId(url) {
 
 function onYouTubeIframeAPIReady() {
   // 초기 더미 플레이리스트 (없으면 기본 하나라도)
-  playlist = ["https://youtube.com/playlist?list=PLEZxU6QNz271eHmBKYXJ9cLacIabzjHv9&si=jN-uqzWMB4bdtiEX"];
+  playlist = ["PLEZxU6QNz271eHmBKYXJ9cLacIabzjHv9"];
   playPauseBtn.disabled = true;
   playPauseBtn.style.opacity = 0.5;
   initPlayer();
