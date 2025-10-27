@@ -51,6 +51,7 @@ function onYouTubeIframeAPIReady() {
   initPlayer();
 }
 
+
 function initPlayer(videoId = null) {
   // 🔒 videoId 없으면 초기화 스킵
   if (!videoId) {
@@ -94,9 +95,16 @@ async function updateSongTitle() {
 }
 
 function onPlayerStateChange(event) {
-  if (event.data === YT.PlayerState.PLAYING) startProgress();
-  else stopProgress();
-  if (event.data === YT.PlayerState.ENDED) changeTrack(true);
+  if (event.data === YT.PlayerState.PLAYING) {
+    startProgress();
+  } else {
+    stopProgress();
+  }
+
+  if (event.data === YT.PlayerState.ENDED) {
+    resetProgressBar();   // 🎯 진행바 초기화
+    changeTrack(true);    // 다음 곡으로 넘어가기
+  }
 }
 
 // 🎶 재생 / 일시정지
@@ -119,8 +127,10 @@ function togglePlay() {
 }
 
 
+
 function changeTrack(next = true) {
   if (playlist.length === 0) return;
+  resetProgressBar(); 
 
   currentIndex = next
     ? (currentIndex + 1) % playlist.length
@@ -176,6 +186,13 @@ function stopProgress() {
     progressInterval = null;
   }
 }
+function resetProgressBar() {
+  if (progressInterval) clearInterval(progressInterval);
+  progress.style.width = "0%";
+  currentTimeText.textContent = "0:00";
+  durationTimeText.textContent = "0:00";
+}
+
 
 function formatTime(seconds) {
   if (isNaN(seconds)) return "0:00";
