@@ -43,7 +43,7 @@ function initPlayer() {
     height: '0',
     width: '0',
     videoId: extractVideoId(playlist[currentIndex]),
-    playerVars: { controls: 0, autoplay: 0, mute: 0 }, // ✅ 자동재생 허용
+    playerVars: { controls: 0, autoplay: 1, mute: 1 }, // ✅ 자동재생 허용
     events: { onStateChange: onPlayerStateChange, onReady: onPlayerReady }
   });
 }
@@ -128,22 +128,25 @@ if (isPlaying) {
 
 }
 
+let lastUpdate = Date.now();
 
 function startProgress() {
   stopProgress();
   progressInterval = setInterval(() => {
-    if (player && player.getDuration) {
-      const current = player.getCurrentTime();
-      const duration = player.getDuration();
-      if (duration > 0) {
-        const percent = (current / duration) * 100;
-        progress.style.width = `${percent}%`;
-        currentTimeText.textContent = formatTime(current);
-        durationTimeText.textContent = formatTime(duration);
-      }
+    const current = player.getCurrentTime();
+    const duration = player.getDuration();
+    const elapsed = (Date.now() - lastUpdate) / 1000;
+
+    if (duration > 0) {
+      const percent = (current / duration) * 100;
+      progress.style.width = `${percent}%`;
+      currentTimeText.textContent = formatTime(current);
+      durationTimeText.textContent = formatTime(duration);
     }
+    lastUpdate = Date.now();
   }, 500);
 }
+
 
 function stopProgress() {
   if (progressInterval) {
@@ -176,11 +179,13 @@ loadPlaylistBtn.addEventListener('click', () => {
     return;
   }
 
-  // ✅ CORS Proxy 적용
-  const proxy = "https://cors-anywhere.herokuapp.com/";
-  const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=${playlistId}&key=AIzaSyDdNqVT7Etw1tYJQN6onzpUpSXceLtWNu0`;
+// ✅ CORS Proxy 적용 (allorigins으로 교체)
+const proxy = "https://api.allorigins.win/raw?url=";
+const apiUrl = encodeURIComponent(
+  `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=${playlistId}&key=AIzaSyDdNqVT7Etw1tYJQN6onzpUpSXceLtWNu0`
+);
 
- fetch(proxy + apiUrl)
+fetch(proxy + apiUrl)
   .then(res => res.json())
   .then(data => {
     console.log("✅ Data:", data);
@@ -189,31 +194,28 @@ loadPlaylistBtn.addEventListener('click', () => {
       return;
     }
 
-    playlist = data.items.map(item => `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`);
+    playlist = data.items.map(
+      item => `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`
+    );
     currentIndex = 0;
 
     const firstId = extractVideoId(playlist[0]);
 
     // ✅ player 존재 확인 후 처리
-if (!player || typeof player.loadVideoById !== "function") {
-  console.warn("⚠️ player 초기화 중... onReady 후 재시도 예정");
-
-  // initPlayer 실행
-  initPlayer();
-
-  // onReady 이벤트 발생 후 처리하도록 대기
-  const waitForPlayer = setInterval(() => {
-    if (player && typeof player.loadVideoById === "function") {
-      clearInterval(waitForPlayer);
+    if (!player || typeof player.loadVideoById !== "function") {
+      console.warn("⚠️ player 초기화 중... onReady 후 재시도 예정");
+      initPlayer();
+      const waitForPlayer = setInterval(() => {
+        if (player && typeof player.loadVideoById === "function") {
+          clearInterval(waitForPlayer);
+          player.loadVideoById(firstId);
+          updateSongTitle();
+        }
+      }, 500);
+    } else {
       player.loadVideoById(firstId);
       updateSongTitle();
     }
-  }, 500);
-} else {
-  player.loadVideoById(firstId);
-  updateSongTitle();
-}
-
 
     alert(`🎧 플레이리스트가 성공적으로 불러와졌습니다! 총 ${playlist.length}곡`);
   })
@@ -221,7 +223,7 @@ if (!player || typeof player.loadVideoById !== "function") {
     console.error("❌ Proxy Error:", err);
     alert("플레이리스트를 불러올 수 없습니다. (프록시 또는 네트워크 오류)");
   });
-});
+
 
 // 🟢 표지 클릭 이벤트 (이건 loadPlaylistBtn 밖에 둬야 함)
 coverWrapper.addEventListener('click', () => {
@@ -308,3 +310,10 @@ function normalizeYouTubeURL(url) {
   }
   return url;
 }
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    // 탭으로 돌아왔을 때 다시 업데이트
+    startProgress();
+  }
+});
