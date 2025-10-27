@@ -202,12 +202,9 @@ loadPlaylistBtn.addEventListener("click", () => {
     return;
   }
 
-  const proxy = "https://api.allorigins.win/raw?url=";
-  const apiUrl = encodeURIComponent(
-    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=${playlistId}&key=AIzaSyDdNqVT7Etw1tYJQN6onzpUpSXceLtWNu0`
-  );
+  const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=${playlistId}&key=AIzaSyDdNqVT7Etw1tYJQN6onzpUpSXceLtWNu0`;
 
-  fetch(proxy + apiUrl)
+  fetch(apiUrl)
     .then(res => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();
