@@ -204,7 +204,7 @@ loadPlaylistBtn.addEventListener("click", () => {
 
   const proxy = "https://corsproxy.io/?";
   const apiUrl = encodeURIComponent(
-    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=${playlistId}&key=YOUR_API_KEY`
+    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=${playlistId}&key=AIzaSyDdNqVT7Etw1tYJQN6onzpUpSXceLtWNu0`
   );
 
   fetch(proxy + apiUrl)
