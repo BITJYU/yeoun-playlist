@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YEOUN PLAYLIST</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="icon" href="./favicon.ico">
+</head>
+<body>
+  <div class="background" id="background"></div>
+
+  <div id="settings-modal" class="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="settings-content">
+      <h2 id="settings-title">Player Settings</h2>
+
+      <label for="title-input">Title</label>
+      <input type="text" id="title-input" placeholder="Enter new title">
+
+      <label for="subtitle-input">Subtitle</label>
+      <textarea id="subtitle-input" placeholder="Enter subtitle"></textarea>
+
+      <label for="playlist-input-field">Playlist URL</label>
+      <input type="text" id="playlist-input-field" placeholder="YouTube Playlist URL">
+
+      <label for="cover-upload">Album Cover</label>
+      <input type="file" id="cover-upload" accept="image/*">
+
+      <label for="effect-select">Effect</label>
+      <select id="effect-select">
+        <option value="none">None</option>
+        <option value="snow">Snow</option>
+        <option value="rain">Rain</option>
+      </select>
+
+      <div class="settings-buttons">
+        <button id="save-settings" type="button">Save</button>
+        <button id="cancel-settings" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <button id="settings-btn" class="settings-btn" type="button">Settings</button>
+
+  <div class="title-bar">
+    <h1 class="title" id="main-title">餘韻</h1>
+  </div>
+
+  <div class="subtitle-wrap">
+    <h2 class="sub-title">애도는 상실을 거스르려는 삶의 미흡이다.
+그러니 한미한 결과일지언정 이어진 잔향 맞이하라.
+이것은 살아간 우리에게 바치는 여운이다.</h2>
+  </div>
+
+  <div class="player">
+    <div class="album">
+      <div class="cover-wrapper" id="cover-wrapper">
+        <img id="cover" src="https://imgur.com/XDN0gFh.png" alt="album cover">
+      </div>
+      <div class="vinyl" id="vinyl"></div>
+    </div>
+
+    <input type="file" id="upload" accept="image/*" hidden>
+
+    <div class="controls">
+      <button id="prev" type="button" aria-label="이전 곡">⏮</button>
+      <button id="playpause" type="button" aria-label="재생">▶</button>
+      <button id="next" type="button" aria-label="다음 곡">⏭</button>
+    </div>
+
+    <h2 class="song-title" id="song-title">재생 중인 곡 없음</h2>
+
+    <div class="progress-wrapper">
+      <div class="time-display" id="current-time">0:00</div>
+      <div
+        class="progress-container"
+        id="progress-container"
+        role="slider"
+        aria-label="재생 위치"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="0"
+      >
+        <div class="progress" id="progress"></div>
+      </div>
+      <div class="time-display" id="duration-time">0:00</div>
+    </div>
+
+    <div id="youtube-player"></div>
+  </div>
+
+  <div class="playlist-input">
+    <input type="text" id="playlist-url" placeholder="YouTube 플레이리스트 URL 입력">
+    <button id="load-playlist" type="button">불러오기</button>
+  </div>
+
+  <canvas id="particles"></canvas>
+
+  <script src="./script.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
